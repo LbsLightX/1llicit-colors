@@ -14,10 +14,14 @@ _require jq curl fzf
 status_code=$(curl -s -o /dev/null -I -w "%{http_code}" "https://github.com/LbsLightX/1llicit-colors")
 if [ "$status_code" -eq "200" ]; then
     echo "Fetching themes list from 1llicit-colors, please wait."
-    theme=$(curl -fSsL https://api.github.com/repos/LbsLightX/1llicit-colors/git/trees/main | jq -r '.tree[] | select (.path | contains(".properties")) | .path' | fzf)
+    
+    # Updated Logic: Recursive search into 'themes/' folder
+    theme=$(curl -fSsL https://api.github.com/repos/LbsLightX/1llicit-colors/git/trees/main?recursive=1 | jq -r '.tree[] | select(.path | match("^themes/.*\\.properties$")) | .path' | fzf)
+    
     if [ $? -eq 0 ]; then
-        echo "Applying color scheme: $theme"
+        echo "Applying color scheme: $(basename $theme .properties)"
         mkdir -p ~/.termux
+        # Download using the full path provided by jq (which includes "themes/...")
         if curl -fsSL "https://raw.githubusercontent.com/LbsLightX/1llicit-colors/main/$theme" -o ~/.termux/colors.properties; then
             termux-reload-settings
             if [ $? -ne 0 ]; then

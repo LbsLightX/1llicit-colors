@@ -5,7 +5,7 @@
 
 GOGH_REPO="https://github.com/Gogh-Co/Gogh.git"
 TEMP_DIR="gogh_temp"
-TARGET_DIR="."
+TARGET_DIR="themes" # Updated to point to the new subfolder
 
 echo "🚀 Starting 1llicit-colors Sync..."
 
@@ -13,6 +13,7 @@ echo "🚀 Starting 1llicit-colors Sync..."
 [ -d "$TEMP_DIR" ] && rm -rf "$TEMP_DIR"
 
 echo "   Cloning Gogh installs..."
+# Clone only the last commit, no history
 git clone --depth 1 "$GOGH_REPO" "$TEMP_DIR" >/dev/null 2>&1
 
 SOURCE_DIR="$TEMP_DIR/installs"
