@@ -16,6 +16,7 @@ if [ "$status_code" -eq "200" ]; then
     echo "Fetching themes list from 1llicit-colors, please wait."
     
     # Updated Logic: Recursive search into 'themes/' folder
+    # Added FZF styling to match core.zsh
     theme=$(curl -fSsL https://api.github.com/repos/LbsLightX/1llicit-colors/git/trees/main?recursive=1 | jq -r '.tree[] | select(.path | match("^themes/.*\\.properties$")) | .path' | fzf --prompt="Gogh Sync > " --height=15 --layout=reverse --header="[ Ctrl-c to Cancel ] | [ Enter to Apply ]")
     
     if [ $? -eq 0 ] && [ -n "$theme" ]; then
