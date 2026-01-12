@@ -13,31 +13,32 @@ _require jq curl fzf
 # Get themes from your new 1llicit-colors repository
 status_code=$(curl -s -o /dev/null -I -w "%{http_code}" "https://github.com/LbsLightX/1llicit-colors")
 if [ "$status_code" -eq "200" ]; then
-    echo "Fetching themes list from 1llicit-colors, please wait."
+    printf "◷ Fetching themes list from 1llicit-colors...\r"
     
-    # OPTIMIZED: Clean Filename Display using jq (split/last)
+    # Updated Logic: Recursive search into 'themes/' folder
+    # Added FZF styling to match core.zsh
     theme_data=$(curl -fSsL https://api.github.com/repos/LbsLightX/1llicit-colors/git/trees/main?recursive=1 | jq -r '.tree[] | select(.path | match("^themes/.*\\.properties$")) | (.path | split("/") | last) + " | " + .path')
     
-    selection=$(echo "$theme_data" | fzf --prompt="Gogh Sync > " --height=15 --layout=reverse --header="[ Ctrl-c to Cancel ] | [ Enter to Apply ]" --delimiter=" | " --with-nth=1)
+    selection=$(echo "$theme_data" | fzf --prompt="Gogh Sync ▶ " --height=15 --layout=reverse --header="[ Ctrl-c to Cancel ] | [ Enter to Apply ]" --delimiter=" | " --with-nth=1)
     
     if [ $? -eq 0 ] && [ -n "$selection" ]; then
         # Extract the real path (Column 2)
         theme_path=$(echo "$selection" | sed 's/.* | //')
         # Extract the name for display
-        theme_name=$(echo "$selection" | sed 's/ | .*//' | sed 's/\\.properties//')
+        theme_name=$(echo "$selection" | sed 's/ | .*//' | sed 's/\.properties//')
         
-        echo "✨ Applying color scheme: $theme_name"
+        printf "✔ Applying color scheme: $theme_name\n"
         mkdir -p ~/.termux
         if curl -fsSL "https://raw.githubusercontent.com/LbsLightX/1llicit-colors/main/$theme_path" -o ~/.termux/colors.properties; then
             termux-reload-settings
             if [ $? -ne 0 ]; then
-                echo "❌ Failed to apply color scheme."
+                echo "✕ Failed to apply color scheme."
             fi
         else
-            echo "❌ Failed to download color scheme."
+            echo "✕ Failed to download color scheme."
         fi
     else
-        echo "⚠️ Cancelled."
+        echo "⚠ Cancelled."
     fi
 else
     echo "Make sure you're connected to the internet and your repo is public!"
