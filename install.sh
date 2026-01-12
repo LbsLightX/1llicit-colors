@@ -19,6 +19,9 @@ if [ "$status_code" -eq "200" ]; then
     # Added FZF styling to match core.zsh
     theme_data=$(curl -fSsL https://api.github.com/repos/LbsLightX/1llicit-colors/git/trees/main?recursive=1 | jq -r '.tree[] | select(.path | match("^themes/.*\\.properties$")) | (.path | split("/") | last) + " | " + .path')
     
+    # Clear fetching message
+    printf "%*s\r" "${COLUMNS:-80}" ""
+
     selection=$(echo "$theme_data" | fzf --prompt="Gogh Sync ⫸ " --height=15 --layout=reverse --header="[ Ctrl-c to Cancel ] | [ Enter to Apply ]" --delimiter=" | " --with-nth=1)
     
     if [ $? -eq 0 ] && [ -n "$selection" ]; then
@@ -27,16 +30,13 @@ if [ "$status_code" -eq "200" ]; then
         # Extract the name for display
         theme_name=$(echo "$selection" | sed 's/ | .*//' | sed 's/\.properties//')
         
-        # Standardized Wording: Applying
-        printf "✔ Applying color scheme: $theme_name\n"
+        printf "◷ Applying color scheme: $theme_name...\r"
         mkdir -p ~/.termux
-        if curl -fsSL "https://raw.githubusercontent.com/LbsLightX/1llicit-colors/main/$theme_path" -o ~/.termux/colors.properties; then
+        if curl -fsSL "https://raw.githubusercontent.com/LbsLightX/1llicit-colors/main/$theme_path" -o ~/.termux/colors.properties >/dev/null 2>&1; then
             termux-reload-settings
-            if [ $? -ne 0 ]; then
-                echo "✕ Failed to apply color scheme."
-            fi
+            printf "✔ Done!                                         \n"
         else
-            echo "✕ Failed to download color scheme."
+            printf "✕ Failed to download color scheme.            \n"
         fi
     else
         echo "⚠ Cancelled."
