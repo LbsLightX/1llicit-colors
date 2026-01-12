@@ -13,7 +13,7 @@ _require jq curl fzf
 # Get themes from your new 1llicit-colors repository
 status_code=$(curl -s -o /dev/null -I -w "%{http_code}" "https://github.com/LbsLightX/1llicit-colors")
 if [ "$status_code" -eq "200" ]; then
-    printf "◷ Fetching themes list from 1llicit-colors...\r"
+    printf "│ ◷ Fetching themes list from 1llicit-colors...\r"
     
     # Updated Logic: Recursive search into 'themes/' folder
     # Added FZF styling to match core.zsh
@@ -22,7 +22,7 @@ if [ "$status_code" -eq "200" ]; then
     # Clear fetching message
     printf "%*s\r" "${COLUMNS:-80}" ""
 
-    selection=$(echo "$theme_data" | fzf --prompt="Gogh Sync ⫸ " --height=15 --layout=reverse --header="[ Ctrl-c to Cancel ] | [ Enter to Apply ]" --delimiter=" | " --with-nth=1)
+    selection=$(echo "$theme_data" | fzf --prompt="│ Gogh Sync ⫸ " --height=15 --layout=reverse --header="│ [ Ctrl-c to Cancel ] | [ Enter to Apply ]" --delimiter=" | " --with-nth=1)
     
     if [ $? -eq 0 ] && [ -n "$selection" ]; then
         # Extract the real path (Column 2)
@@ -30,16 +30,16 @@ if [ "$status_code" -eq "200" ]; then
         # Extract the name for display
         theme_name=$(echo "$selection" | sed 's/ | .*//' | sed 's/\.properties//')
         
-        printf "◷ Applying color scheme: $theme_name...\r"
+        printf "│ ◷ Applying color scheme: $theme_name...\r"
         mkdir -p ~/.termux
         if curl -fsSL "https://raw.githubusercontent.com/LbsLightX/1llicit-colors/main/$theme_path" -o ~/.termux/colors.properties >/dev/null 2>&1; then
             termux-reload-settings
-            printf "✔ Done!                                         \n"
+            printf "│ ⊕ Applied: $theme_name                                         \n"
         else
-            printf "✕ Failed to download color scheme.            \n"
+            printf "│ ⊖ Failed to download color scheme.            \n"
         fi
     else
-        echo "⚠ Cancelled."
+        echo "│ ⚠ Cancelled."
     fi
 else
     echo "Make sure you're connected to the internet and your repo is public!"
