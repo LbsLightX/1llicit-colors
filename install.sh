@@ -27,6 +27,7 @@ if [ "$status_code" -eq "200" ]; then
         # Extract the name for display
         theme_name=$(echo "$selection" | sed 's/ | .*//' | sed 's/\.properties//')
         
+        # Standardized Wording: Applying
         printf "✔ Applying color scheme: $theme_name\n"
         mkdir -p ~/.termux
         if curl -fsSL "https://raw.githubusercontent.com/LbsLightX/1llicit-colors/main/$theme_path" -o ~/.termux/colors.properties; then
