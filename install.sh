@@ -19,7 +19,7 @@ if [ "$status_code" -eq "200" ]; then
     # Added FZF styling to match core.zsh
     theme_data=$(curl -fSsL https://api.github.com/repos/LbsLightX/1llicit-colors/git/trees/main?recursive=1 | jq -r '.tree[] | select(.path | match("^themes/.*\\.properties$")) | (.path | split("/") | last) + " | " + .path')
     
-    selection=$(echo "$theme_data" | fzf --prompt="Gogh Sync ▶ " --height=15 --layout=reverse --header="[ Ctrl-c to Cancel ] | [ Enter to Apply ]" --delimiter=" | " --with-nth=1)
+    selection=$(echo "$theme_data" | fzf --prompt="Gogh Sync ⫸ " --height=15 --layout=reverse --header="[ Ctrl-c to Cancel ] | [ Enter to Apply ]" --delimiter=" | " --with-nth=1)
     
     if [ $? -eq 0 ] && [ -n "$selection" ]; then
         # Extract the real path (Column 2)
