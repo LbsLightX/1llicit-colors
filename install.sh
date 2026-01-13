@@ -42,6 +42,6 @@ if [ "$status_code" -eq "200" ]; then
         echo "│ ⚠ Cancelled."
     fi
 else
-    echo "Make sure you're connected to the internet and your repo is public!"
+    echo "│ ⚠ Make sure you're connected to the internet and your repo is public!"
     exit 1
 fi
