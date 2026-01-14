@@ -1,81 +1,95 @@
 #!/usr/bin/env bash
 
-# 1llicit-colors Sync & Convert Tool
-# Syncs new themes from Gogh and converts them to Termux properties format.
+# ─────────────────────────────
+# UI STYLES
+# ─────────────────────────────
+BOLD="\033[1m"
+DIM="\033[2m"
+UNDER="\033[4m"
 
+GREEN="\033[1;32m"
+RED="\033[1;31m"
+YELLOW="\033[1;33m"
+CYAN="\033[1;36m"
+WHITE="\033[1;97m"
+
+RESET="\033[0m"
+
+# ─────────────────────────────
+# CONFIG
+# ─────────────────────────────
 GOGH_REPO="https://github.com/Gogh-Co/Gogh.git"
 TEMP_DIR="gogh_temp"
 TARGET_DIR="themes"
-
-echo -e "\n  ╭── \033[1;35mSYNC MANAGER\033[0m ❂ ──"
-
-# 1. Fetch Source Files
-[ -d "$TEMP_DIR" ] && rm -rf "$TEMP_DIR"
-
-printf "│ ◷ Cloning Gogh installs...\r"
-git clone --depth 1 "$GOGH_REPO" "$TEMP_DIR" >/dev/null 2>&1
-printf "│ ⊕ Source cloned.          \n"
-
 SOURCE_DIR="$TEMP_DIR/installs"
+
 COUNT_NEW=0
 COUNT_SKIPPED=0
 
-echo "│"
-echo "│ ◷ Processing themes..."
+# ─────────────────────────────
+# HEADER
+# ─────────────────────────────
+echo
+echo -e "╔═════════ ${WHITE}${BOLD}${UNDER}SYNC COLOR THEMES${RESET} ═════════ ◈"
+echo "╬"
+echo -e "╬ ${GREEN}${BOLD}[+] Source:${RESET} Gogh color schemes"
+echo -e "╬     ${DIM}Syncs Gogh themes into Termux .properties format.${RESET}"
+echo "╬"
 
-# 2. Iterate and Convert
+# ─────────────────────────────
+# FETCH SOURCE
+# ─────────────────────────────
+echo -e "╬ ${YELLOW}${BOLD}[*] Fetching:${RESET} Source repository"
+echo -e "╬     ${DIM}This may take a moment depending on your network.${RESET}"
+echo "╬"
+
+rm -rf "$TEMP_DIR"
+git clone --depth 1 "$GOGH_REPO" "$TEMP_DIR" >/dev/null 2>&1
+
+echo -e "╬ ${GREEN}${BOLD}[+] Ready:${RESET} Source repository"
+echo "╬"
+
+# ─────────────────────────────
+# CONVERT THEMES (LIVE STATUS)
+# ─────────────────────────────
+printf "╬ ${YELLOW}${BOLD}[*] Converting:${RESET} Themes..."
+
 for sh_file in "$SOURCE_DIR"/*.sh; do
     [ -e "$sh_file" ] || continue
-    
+
     BASENAME=$(basename "$sh_file" .sh)
     TARGET_FILE="$TARGET_DIR/$BASENAME.properties"
-    
-    # Check if we already have it
+
     if [ -f "$TARGET_FILE" ]; then
         ((COUNT_SKIPPED++))
         continue
     fi
-    
-    # Needs Conversion!
-    PROFILE_NAME=$(grep 'export PROFILE_NAME' "$sh_file" | cut -d'"' -f2)
-    [ -z "$PROFILE_NAME" ] && PROFILE_NAME="$BASENAME"
-    
-echo "│ ⊕ Converting: $PROFILE_NAME"
 
-    # Start writing
+    printf "\r╬ ${YELLOW}${BOLD}[*] Converting:${RESET} Themes ${DIM}(new: %d, skipped: %d)${RESET}   " \
+           "$COUNT_NEW" "$COUNT_SKIPPED"
+
     {
-        echo "# ================================================================"
-        echo "# Color Scheme: $PROFILE_NAME"
-        echo "# Source: https://github.com/Gogh-Co/Gogh/blob/main/installs/$BASENAME.sh"
-        echo "# Credits: https://github.com/Gogh-Co/Gogh/graphs/contributors"
-        echo "# ================================================================"
-        echo ""
+        echo "# $BASENAME"
+        echo
+        bash "$sh_file" | grep -E '^(color|background|foreground|cursor)' | sed 's/export //'
     } > "$TARGET_FILE"
-    
-    # Parse Variables
-    for i in {01..16}; do
-        val=$(grep "export COLOR_$i=" "$sh_file" | cut -d'"' -f2)
-        if [ -n "$val" ]; then
-            num=$((10#$i))
-            idx=$((num - 1))
-            echo "color$idx=$val" >> "$TARGET_FILE"
-        fi
-    done
-    
-    echo "" >> "$TARGET_FILE"
 
-    grep 'export BACKGROUND_COLOR=' "$sh_file" | cut -d'"' -f2 | xargs -I{} echo "background={}" >> "$TARGET_FILE"
-    grep 'export FOREGROUND_COLOR=' "$sh_file" | cut -d'"' -f2 | xargs -I{} echo "foreground={}" >> "$TARGET_FILE"
-    grep 'export CURSOR_COLOR='     "$sh_file" | cut -d'"' -f2 | xargs -I{} echo "cursor={}"     >> "$TARGET_FILE"
-    
     ((COUNT_NEW++))
 done
 
-# 3. Cleanup
+# clear & replace converting line
+printf "\r\033[2K"
+echo -e "╬ ${GREEN}${BOLD}[+] Completed:${RESET} Theme conversion"
+echo "╬"
+
+# cleanup temp dir
 rm -rf "$TEMP_DIR"
 
-echo "│"
-echo "╰── [ REPORT ] ──"
-echo "    ⊕ New themes: $COUNT_NEW"
-echo "    ⦿ Skipped:    $COUNT_SKIPPED"
-echo ""
+# ─────────────────────────────
+# REPORT
+# ─────────────────────────────
+echo -e "╬ ${WHITE}${BOLD}[ SYNC REPORT ]${RESET}"
+echo -e "╬     ${GREEN}${BOLD}[+] Added:${RESET}   ${BOLD}${COUNT_NEW}${RESET}"
+echo -e "╬     ${RED}${BOLD}[-] Skipped:${RESET} ${BOLD}${COUNT_SKIPPED}${RESET}"
+echo "╬"
+echo "╚═════════════════════════════════════ ◈"

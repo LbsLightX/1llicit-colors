@@ -16,13 +16,12 @@ if [ "$status_code" -eq "200" ]; then
     printf "│ ◷ Fetching themes list from 1llicit-colors...\r"
     
     # Updated Logic: Recursive search into 'themes/' folder
-    # Added FZF styling to match core.zsh
     theme_data=$(curl -fSsL https://api.github.com/repos/LbsLightX/1llicit-colors/git/trees/main?recursive=1 | jq -r '.tree[] | select(.path | match("^themes/.*\\.properties$")) | (.path | split("/") | last) + " | " + .path')
     
     # Clear fetching message
     printf "%*s\r" "${COLUMNS:-80}" ""
 
-    selection=$(echo "$theme_data" | fzf --prompt="│ Gogh Sync ⫸ " --height=15 --layout=reverse --header="│ [ Ctrl-c to Cancel ] | [ Enter to Apply ]" --delimiter=" | " --with-nth=1)
+    selection=$(echo "$theme_data" | fzf --prompt="│ Gogh Sync ⫸ " --height=15 --layout=reverse --header="[ Ctrl-c to Cancel ] | [ Enter to Apply ]" --delimiter=" | " --with-nth=1)
     
     if [ $? -eq 0 ] && [ -n "$selection" ]; then
         # Extract the real path (Column 2)
@@ -34,14 +33,14 @@ if [ "$status_code" -eq "200" ]; then
         mkdir -p ~/.termux
         if curl -fsSL "https://raw.githubusercontent.com/LbsLightX/1llicit-colors/main/$theme_path" -o ~/.termux/colors.properties >/dev/null 2>&1; then
             termux-reload-settings
-            printf "│ ⊕ Applied: $theme_name                                         \n"
+            printf "│ ✔ Applied color scheme: $theme_name                               \n"
         else
-            printf "│ ⊖ Failed to download color scheme.            \n"
+            printf "│ ✕ Failed to download color scheme.            \n"
         fi
     else
         echo "│ ⚠ Cancelled."
     fi
 else
-    echo "│ ⚠ Make sure you're connected to the internet and your repo is public!"
+    echo "│ ✕ Error: Can't connect to 1llicit-colors repository."
     exit 1
 fi
