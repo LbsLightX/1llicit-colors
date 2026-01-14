@@ -32,7 +32,6 @@ _require jq curl fzf
 # ─────────────────────────────
 # HEADER
 # ─────────────────────────────
-echo "╬"
 echo -e "\n╬╌╌╌╌╌╌╌╌╌╌ ${WHITE}${B}${DIM}COLOR THEME INSTALLER${RESET} ╌╌╌╌╌╌╌╌╌ ◇"
 echo "╬"
 echo -e "╬ ${GREEN}${B}[+] Source:${RESET} 1llicit-colors repository"
