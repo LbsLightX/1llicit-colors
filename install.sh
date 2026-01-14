@@ -33,7 +33,7 @@ _require jq curl fzf
 # HEADER
 # ─────────────────────────────
 echo
-echo -e "╔══════════ ${WHITE}${B}${UNDER}COLOR THEME INSTALLER${RESET} ═════════ ◈"
+echo -e "\n╔══════════ ${WHITE}${B}${UNDER}COLOR THEME INSTALLER${RESET} ═════════ ◈"
 echo "╬"
 echo -e "╬ ${GREEN}${B}[+] Source:${RESET} 1llicit-colors repository"
 echo -e "╬     ${DIM}Browse and apply themes interactively.${RESET}"

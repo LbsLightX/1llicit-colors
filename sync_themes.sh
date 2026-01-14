@@ -20,7 +20,7 @@ TEMP_DIR="gogh_temp"
 TARGET_DIR="themes"
 
 echo
-echo -e "╔═══════════════ ${WHITE}${BOLD}${UNDER}SYNC MANAGER${RESET} ═════════════ ◈"
+echo -e "\n╔═══════════════ ${WHITE}${BOLD}${UNDER}SYNC MANAGER${RESET} ═════════════ ◈"
 echo "╬"
 
 # 1. Fetch Source Files
