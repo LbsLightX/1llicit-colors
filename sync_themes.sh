@@ -12,6 +12,7 @@ YELLOW="\033[1;33m"
 CYAN="\033[1;36m"
 WHITE="\033[1;97m"
 RESET="\033[0m"
+UNDER="\033[4m"
 
 # CONFIG
 GOGH_REPO="https://github.com/Gogh-Co/Gogh.git"
@@ -19,7 +20,7 @@ TEMP_DIR="gogh_temp"
 TARGET_DIR="themes"
 
 echo
-echo -e "╔═════════ ${WHITE}${BOLD}SYNC MANAGER${RESET} ════════════════════════════ ◈"
+echo -e "╔═══════════════ ${WHITE}${BOLD}${UNDER}SYNC MANAGER${RESET} ═════════════ ◈"
 echo "╬"
 
 # 1. Fetch Source Files
@@ -35,7 +36,7 @@ COUNT_NEW=0
 COUNT_SKIPPED=0
 
 echo "╬"
-printf "╬ ${YELLOW}${B}[*]${RESET} Processing themes..."
+printf "╬ ${YELLOW}${B}[*]${RESET} Processing themes...Hold on..."
 
 # 2. Iterate and Convert
 for sh_file in "$SOURCE_DIR"/*.sh; do
@@ -93,8 +94,9 @@ rm -rf "$TEMP_DIR"
 
 printf "\r\033[K"
 echo "╬"
-echo -e "╠═════════ ${WHITE}${B}REPORT${RESET} ══════════════════════════════════ ◈"
+echo -e "╠╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌ ${WHITE}${B}R E P O R T${RESET} ╌╌╌╌╌╌╌╌╌╌╌╌╌╌ ◇"
+echo "╬"
 echo -e "╬ ${GREEN}${B}[+]${RESET} Added:   ${BOLD}${COUNT_NEW}${RESET}"
 echo -e "╬ ${CYAN}${B}[-]${RESET} Skipped: ${BOLD}${COUNT_SKIPPED}${RESET}"
-echo -e "╚════════════════════════════════════════════════════ ◈"
+echo -e "╚══════════════════════════════════════════ ◈"
 echo ""

@@ -3,7 +3,7 @@
 # ─────────────────────────────
 # UI STYLES (shared vibe)
 # ─────────────────────────────
-BOLD="\033[1m"
+B="\033[1m"
 DIM="\033[2m"
 UNDER="\033[4m"
 
@@ -21,7 +21,7 @@ RESET="\033[0m"
 _require () {
     for pkg in "$@"; do
         command -v "$pkg" >/dev/null 2>&1 || {
-            echo -e "${RED}${BOLD}[!] Missing:${RESET} Required dependency '$pkg'"
+            echo -e "${RED}${B}[!] Missing:${RESET} Required dependency '$pkg'"
             exit 1
         }
     done
@@ -33,32 +33,34 @@ _require jq curl fzf
 # HEADER
 # ─────────────────────────────
 echo
-echo -e "╔═════════ ${WHITE}${BOLD}${UNDER}COLOR THEME INSTALLER${RESET} ═════════ ◈"
+echo -e "╔══════════ ${WHITE}${B}${UNDER}COLOR THEME INSTALLER${RESET} ═════════ ◈"
 echo "╬"
-echo -e "╬ ${GREEN}${BOLD}[+] Source:${RESET} 1llicit-colors repository"
-echo -e "╬     ${DIM}Browse and apply Termux color themes interactively.${RESET}"
+echo -e "╬ ${GREEN}${B}[+] Source:${RESET} 1llicit-colors repository"
+echo -e "╬     ${DIM}Browse and apply themes interactively.${RESET}"
 echo "╬"
 
 # ─────────────────────────────
 # CHECK REPOSITORY AVAILABILITY
 # ─────────────────────────────
-printf "╬ ${YELLOW}${BOLD}[*] Connecting:${RESET} To repository...\r"
+printf "╬ ${YELLOW}${B}[*] Connecting:${RESET} To repository...\r"
 
 status_code=$(curl -s -o /dev/null -I -w "%{http_code}" \
     "https://github.com/LbsLightX/1llicit-colors")
 
 if [ "$status_code" -ne 200 ]; then
     printf "\r\033[K"
-    echo -e "╬ ${RED}${BOLD}[!] Error:${RESET} Unable to reach repository"
+    echo -e "╬ ${RED}${B}[!] Error:${RESET} Unable to reach repository"
     echo -e "╬     ${DIM}Please check your internet connection.${RESET}"
-    echo "╚════════════════════════════════════ ◈"
+    echo "╚══════════════════════════════════════════ ◈"
+    echo
     exit 1
+    
 fi
 
 # ─────────────────────────────
 # FETCH THEME LIST
 # ─────────────────────────────
-printf "╬ ${YELLOW}${BOLD}[*] Loading:${RESET} Theme list from source...\r"
+printf "╬ ${YELLOW}${B}[*] Loading:${RESET} Theme list from source...\r"
 
 theme_data=$(curl -fSsL \
     https://api.github.com/repos/LbsLightX/1llicit-colors/git/trees/main?recursive=1 |
@@ -80,9 +82,12 @@ selection=$(echo "$theme_data" | fzf \
     --with-nth=1)
 
 if [ -z "$selection" ]; then
-    echo -e "╬ ${RED}${BOLD}[-] Cancelled:${RESET} No theme selected"
-    echo "╚════════════════════════════════════ ◈"
+    echo -e "╬ ${RED}${B}[-] Cancelled:${RESET} No theme selected"
+    echo "╬"
+    echo "╚══════════════════════════════════════════ ◈"
+    echo
     exit 0
+    
 fi
 
 theme_path=$(echo "$selection" | sed 's/.* | //')
@@ -91,7 +96,7 @@ theme_name=$(echo "$selection" | sed 's/ | .*//' | sed 's/\.properties//')
 # ─────────────────────────────
 # APPLY THEME
 # ─────────────────────────────
-printf "╬ ${YELLOW}${BOLD}[*] Applying:${RESET} $theme_name...\r"
+printf "╬ ${YELLOW}${B}[*] Applying:${RESET} $theme_name...\r"
 
 mkdir -p ~/.termux
 
@@ -101,11 +106,12 @@ if curl -fsSL \
 
     termux-reload-settings
     printf "\r\033[K"
-    echo -e "╬ ${GREEN}${BOLD}[+] Applied:${RESET} $theme_name"
+    echo -e "╬ ${GREEN}${B}[+] Applied:${RESET} $theme_name"
 else
     printf "\r\033[K"
-    echo -e "╬ ${RED}${BOLD}[!] Failed:${RESET} Unable to apply theme"
+    echo -e "╬ ${RED}${B}[!] Failed:${RESET} Unable to apply theme"
 fi
 
 echo "╬"
-echo "╚════════════════════════════════════ ◈"
+echo "╚══════════════════════════════════════════ ◈"
+echo
