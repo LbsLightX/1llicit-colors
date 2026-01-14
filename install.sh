@@ -32,8 +32,8 @@ _require jq curl fzf
 # ─────────────────────────────
 # HEADER
 # ─────────────────────────────
-echo
-echo -e "\n╔══════════ ${WHITE}${B}${UNDER}COLOR THEME INSTALLER${RESET} ═════════ ◈"
+echo "╬"
+echo -e "\n╬╌╌╌╌╌╌╌╌╌╌ ${WHITE}${B}${DIM}COLOR THEME INSTALLER${RESET} ╌╌╌╌╌╌╌╌╌ ◇"
 echo "╬"
 echo -e "╬ ${GREEN}${B}[+] Source:${RESET} 1llicit-colors repository"
 echo -e "╬     ${DIM}Browse and apply themes interactively.${RESET}"
@@ -51,7 +51,7 @@ if [ "$status_code" -ne 200 ]; then
     printf "\r\033[K"
     echo -e "╬ ${RED}${B}[!] Error:${RESET} Unable to reach repository"
     echo -e "╬     ${DIM}Please check your internet connection.${RESET}"
-    echo "╚══════════════════════════════════════════ ◈"
+    echo "╚╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌ ◇"
     echo
     exit 1
     
@@ -84,8 +84,7 @@ selection=$(echo "$theme_data" | fzf \
 if [ -z "$selection" ]; then
     echo -e "╬ ${RED}${B}[-] Cancelled:${RESET} No theme selected"
     echo "╬"
-    echo "╚══════════════════════════════════════════ ◈"
-    echo
+    echo "╬╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌ ◇"
     exit 0
     
 fi
@@ -113,5 +112,5 @@ else
 fi
 
 echo "╬"
-echo "╚══════════════════════════════════════════ ◈"
+echo "╚╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌ ◇"
 echo
