@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
 
 # 1llicit-colors Sync & Convert Tool
-# Heavy Box Edition
 
-# Colors & Styles
-B="\033[1m"
+# colors & styles
+BOLD="\033[1m"
 DIM="\033[2m"
+UNDER="\033[4m"
+CYAN="\033[1;36m"
 GREEN="\033[1;32m"
 RED="\033[1;31m"
-YELLOW="\033[1;33m"
-CYAN="\033[1;36m"
 WHITE="\033[1;97m"
+YELLOW="\033[1;33m"
 RESET="\033[0m"
-UNDER="\033[4m"
 
-# CONFIG
+
+# config
 GOGH_REPO="https://github.com/Gogh-Co/Gogh.git"
 TEMP_DIR="gogh_temp"
 TARGET_DIR="themes"
@@ -23,42 +23,44 @@ echo
 echo -e "\n╔═══════════════ ${WHITE}${BOLD}${UNDER}SYNC MANAGER${RESET} ═════════════ ◈"
 echo "╬"
 
-# 1. Fetch Source Files
+
+# fetch source files
 [ -d "$TEMP_DIR" ] && rm -rf "$TEMP_DIR"
 
-printf "╬ ${YELLOW}${B}[*]${RESET} Cloning Gogh installs...\r"
+printf "╬ ${YELLOW}${BOLD}[*]${RESET} Cloning Gogh installs...\r"
 git clone --depth 1 "$GOGH_REPO" "$TEMP_DIR" >/dev/null 2>&1
 printf "\r\033[K"
-echo -e "╬ ${GREEN}${B}[+]${RESET} Source cloned."
+echo -e "╬ ${GREEN}${BOLD}[+]${RESET} Source cloned."
 
 SOURCE_DIR="$TEMP_DIR/installs"
 COUNT_NEW=0
 COUNT_SKIPPED=0
 
 echo "╬"
-printf "╬ ${YELLOW}${B}[*]${RESET} Processing themes...Hold on..."
+printf "╬ ${YELLOW}${BOLD}[*]${RESET} Processing themes...Hold on..."
 
-# 2. Iterate and Convert
+
+# iterate and convert
 for sh_file in "$SOURCE_DIR"/*.sh; do
     [ -e "$sh_file" ] || continue
     
     BASENAME=$(basename "$sh_file" .sh)
     TARGET_FILE="$TARGET_DIR/$BASENAME.properties"
     
-    # Check if we already have it
+    # check if we already have it
     if [ -f "$TARGET_FILE" ]; then
         ((COUNT_SKIPPED++))
         continue
     fi
-    
-    # Needs Conversion!
+   
+    # needs conversion
     PROFILE_NAME=$(grep 'export PROFILE_NAME' "$sh_file" | cut -d'"' -f2)
     [ -z "$PROFILE_NAME" ] && PROFILE_NAME="$BASENAME"
     
     printf "\r\033[K"
-echo -e "╬ ${GREEN}${B}[+]${RESET} Converting: $PROFILE_NAME"
+echo -e "╬ ${GREEN}${BOLD}[+]${RESET} Converting: $PROFILE_NAME"
     
-    # Start writing (Standard Header)
+    # start writing (standard header)
     {
         echo "# ==============================================================="
         echo "# Color Scheme: $PROFILE_NAME"
@@ -68,8 +70,9 @@ echo -e "╬ ${GREEN}${B}[+]${RESET} Converting: $PROFILE_NAME"
         echo ""
     } > "$TARGET_FILE"
     
-    # SAFE PARSING LOGIC (No execution)
-    # Part 1: Indexed Colors (0-15) - Written FIRST
+    
+# safe pharsing logic (no execution)
+    # part 1: indexed colors (0-15) - written first
     for i in {01..16}; do
         val=$(grep "export COLOR_$i=" "$sh_file" | cut -d'"' -f2)
         if [ -n "$val" ]; then
@@ -81,7 +84,7 @@ echo -e "╬ ${GREEN}${B}[+]${RESET} Converting: $PROFILE_NAME"
     
     echo "" >> "$TARGET_FILE"
 
-    # Part 2: Background/Foreground/Cursor - Written LAST
+    # part 2: background/foreground/cursor - written last
     grep 'export BACKGROUND_COLOR=' "$sh_file" | cut -d'"' -f2 | xargs -I{} echo "background={}" >> "$TARGET_FILE"
 grep 'export FOREGROUND_COLOR=' "$sh_file" | cut -d'"' -f2 | xargs -I{} echo "foreground={}" >> "$TARGET_FILE"
 grep 'export CURSOR_COLOR='     "$sh_file" | cut -d'"' -f2 | xargs -I{} echo "cursor={}"     >> "$TARGET_FILE"
@@ -89,14 +92,18 @@ grep 'export CURSOR_COLOR='     "$sh_file" | cut -d'"' -f2 | xargs -I{} echo "cu
     ((COUNT_NEW++))
 done
 
-# 3. Cleanup
+
+# cleanup
 rm -rf "$TEMP_DIR"
 
 printf "\r\033[K"
 echo "╬"
-echo -e "╠╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌ ${WHITE}${B}R E P O R T${RESET} ╌╌╌╌╌╌╌╌╌╌╌╌╌╌ ◇"
+echo -e "╠╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌ ${WHITE}${BOLD}R E P O R T${RESET} ╌╌╌╌╌╌╌╌╌╌╌╌╌╌ ◇"
 echo "╬"
-echo -e "╬ ${GREEN}${B}[+]${RESET} Added:   ${BOLD}${COUNT_NEW}${RESET}"
-echo -e "╬ ${CYAN}${B}[-]${RESET} Skipped: ${BOLD}${COUNT_SKIPPED}${RESET}"
+echo -e "╬ ${GREEN}${BOLD}[+]${RESET} Added:   ${BOLD}${COUNT_NEW}${RESET}"
+echo -e "╬ ${CYAN}${BOLD}[-]${RESET} Skipped: ${BOLD}${COUNT_SKIPPED}${RESET}"
 echo -e "╚══════════════════════════════════════════ ◈"
 echo ""
+
+
+# LbsLightX
