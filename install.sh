@@ -66,7 +66,7 @@ printf "\r\033[K"
 
 # theme selection
 selection=$(echo "$theme_data" | fzf \
-    --prompt="╬ Selection ⫸ " \
+    --prompt="╬ Gogh color schemes ⫸ " \
     --height=15 \
     --layout=reverse \
     --header="[ Enter: Apply ] | [ Ctrl+C: Cancel ]" \
