@@ -29,7 +29,7 @@ _require jq curl fzf
 
 
 # header
-echo -e "\n╬╌╌╌╌╌╌╌╌╌╌ ${WHITE}${BOLD}${DIM}COLOR THEME INSTALLER${RESET} ╌╌╌╌╌╌╌╌╌ ◇"
+echo -e "╬╌╌╌╌╌╌╌╌╌╌ ${WHITE}${BOLD}${DIM}COLOR THEME INSTALLER${RESET} ╌╌╌╌╌╌╌╌╌╌ ◇"
 echo "╬"
 echo -e "╬ ${GREEN}${BOLD}[+] Source:${RESET} 1llicit-colors repository"
 echo -e "╬     ${DIM}Browse and apply themes interactively.${RESET}"
@@ -46,7 +46,7 @@ if [ "$status_code" -ne 200 ]; then
     printf "\r\033[K"
     echo -e "╬ ${RED}${BOLD}[!] Error:${RESET} Unable to reach repository"
     echo -e "╬     ${DIM}Please check your internet connection.${RESET}"
-    echo "╚╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌ ◇"
+    echo "╚╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌ ◇"
     echo
     exit 1
     
@@ -76,7 +76,7 @@ selection=$(echo "$theme_data" | fzf \
 if [ -z "$selection" ]; then
     echo -e "╬ ${RED}${BOLD}[-] Cancelled:${RESET} No theme selected"
     echo "╬"
-    echo "╬╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌ ◇"
+    echo "╬╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌ ◇"
     exit 0
     
 fi
@@ -102,7 +102,7 @@ else
     echo -e "╬ ${RED}${BOLD}[!] Failed:${RESET} Unable to apply theme"
 fi
 echo "╬"
-echo "╬╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌ ◇"
+echo "╬╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌ ◇"
 echo
 
 # LbsLightX

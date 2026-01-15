@@ -20,7 +20,7 @@ TEMP_DIR="gogh_temp"
 TARGET_DIR="themes"
 
 echo
-echo -e "\n╔═══════════════ ${WHITE}${BOLD}${UNDER}SYNC MANAGER${RESET} ═════════════ ◈"
+echo -e "\n╔═══════════════ ${WHITE}${BOLD}${UNDER}SYNC MANAGER${RESET} ═════════════ ☢"
 echo "╬"
 
 
@@ -102,7 +102,7 @@ echo -e "╠╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌ ${WHITE}${BOLD}R E P O
 echo "╬"
 echo -e "╬ ${GREEN}${BOLD}[+]${RESET} Added:   ${BOLD}${COUNT_NEW}${RESET}"
 echo -e "╬ ${CYAN}${BOLD}[-]${RESET} Skipped: ${BOLD}${COUNT_SKIPPED}${RESET}"
-echo -e "╚══════════════════════════════════════════ ◈"
+echo -e "╚══════════════════════════════════════════ ☢"
 echo ""
 
 
