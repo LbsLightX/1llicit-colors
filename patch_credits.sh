@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-# Path to your themes (Adjust if necessary)
+# 
+
+# path to your themes
 THEME_DIR="themes" 
 OUTPUT_DIR="patched_themes"
 
@@ -18,12 +20,10 @@ for file in "$THEME_DIR"/*.properties; do
     filename=$(basename "$file")
     name="${filename%.properties}"
     
-    # 1. READ CONTENT (Skip lines starting with # or empty lines at top)
-    # We grep for lines starting with 'color', 'background', 'foreground', 'cursor'
-    # This ensures we only capture the DATA, not the old comments.
+    # we grep for lines starting with 'color', 'background', 'foreground', 'cursor'
     content=$(grep -E "^(color|background|foreground|cursor)" "$file")
     
-    # 2. WRITE NEW FILE
+    # write new file
     {
         echo "# ==============================================================="
         echo "# Color Scheme: $name"
@@ -50,3 +50,6 @@ echo "---------------------------------------------"
 echo "Done! Patched $count themes."
 echo "Location: ./$OUTPUT_DIR/"
 echo "---------------------------------------------"
+
+
+# LbsLightX
