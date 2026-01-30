@@ -2,7 +2,7 @@
 
 # 1llicit-colors Sync & Convert Tool
 
-# colors & styles
+# Colors & Styles
 BOLD="\033[1m"
 DIM="\033[2m"
 UNDER="\033[4m"
@@ -13,54 +13,54 @@ WHITE="\033[1;97m"
 YELLOW="\033[1;33m"
 RESET="\033[0m"
 
-
-# config
+# Config
 GOGH_REPO="https://github.com/Gogh-Co/Gogh.git"
 TEMP_DIR="gogh_temp"
 TARGET_DIR="themes"
 
-echo
-echo -e "\n╔═══════════════ ${WHITE}${BOLD}${UNDER}SYNC MANAGER${RESET} ═════════════ ☢"
+# Header
+echo -e "\n╔═══════════════ ${WHITE}${BOLD}${UNDER}SYNC MANAGER${RESET} ══════════════ ☢"
 echo "╬"
 
+# Directory Check
+if [ ! -d "$TARGET_DIR" ]; then
+    echo -e "╬ ${CYAN}[*]${RESET} Creating target directory..."
+    mkdir -p "$TARGET_DIR"
+fi
 
-# fetch source files
+# Fetch Source Files
 [ -d "$TEMP_DIR" ] && rm -rf "$TEMP_DIR"
 
-printf "╬ ${YELLOW}${BOLD}[*]${RESET} Cloning Gogh installs...\r"
+printf "╬ ${CYAN}[*]${RESET} Cloning Gogh repository...\r"
 git clone --depth 1 "$GOGH_REPO" "$TEMP_DIR" >/dev/null 2>&1
 printf "\r\033[K"
-echo -e "╬ ${GREEN}${BOLD}[+]${RESET} Source cloned."
+echo -e "╬ ${GREEN}${BOLD}[+]${RESET} Source cloned successfully."
 
 SOURCE_DIR="$TEMP_DIR/installs"
 COUNT_NEW=0
 COUNT_SKIPPED=0
 
 echo "╬"
-printf "╬ ${YELLOW}${BOLD}[*]${RESET} Processing themes...Hold on..."
+echo -e "╬ ${CYAN}[*]${RESET} Processing themes..."
 
-
-# iterate and convert
+# Iterate and Convert
 for sh_file in "$SOURCE_DIR"/*.sh; do
     [ -e "$sh_file" ] || continue
     
     BASENAME=$(basename "$sh_file" .sh)
     TARGET_FILE="$TARGET_DIR/$BASENAME.properties"
     
-    # check if we already have it
+    # Check if we already have it
     if [ -f "$TARGET_FILE" ]; then
         ((COUNT_SKIPPED++))
         continue
     fi
    
-    # needs conversion
+    # Needs conversion
     PROFILE_NAME=$(grep 'export PROFILE_NAME' "$sh_file" | cut -d'"' -f2)
     [ -z "$PROFILE_NAME" ] && PROFILE_NAME="$BASENAME"
     
-    printf "\r\033[K"
-echo -e "╬ ${GREEN}${BOLD}[+]${RESET} Converting: $PROFILE_NAME"
-    
-    # start writing (standard header)
+    # Start writing (Standard Header)
     {
         echo "# ==============================================================="
         echo "# Color Scheme: $PROFILE_NAME"
@@ -76,9 +76,8 @@ echo -e "╬ ${GREEN}${BOLD}[+]${RESET} Converting: $PROFILE_NAME"
         echo ""
     } > "$TARGET_FILE"
     
-    
-# safe pharsing logic (no execution)
-    # part 1: indexed colors (0-15) - written first
+    # Safe Parsing Logic (No Execution)
+    # Part 1: Indexed Colors (01-16)
     for i in {01..16}; do
         val=$(grep "export COLOR_$i=" "$sh_file" | cut -d'"' -f2)
         if [ -n "$val" ]; then
@@ -90,26 +89,30 @@ echo -e "╬ ${GREEN}${BOLD}[+]${RESET} Converting: $PROFILE_NAME"
     
     echo "" >> "$TARGET_FILE"
 
-    # part 2: background/foreground/cursor - written last
+    # Part 2: Background/Foreground/Cursor
     grep 'export BACKGROUND_COLOR=' "$sh_file" | cut -d'"' -f2 | xargs -I{} echo "background={}" >> "$TARGET_FILE"
-grep 'export FOREGROUND_COLOR=' "$sh_file" | cut -d'"' -f2 | xargs -I{} echo "foreground={}" >> "$TARGET_FILE"
-grep 'export CURSOR_COLOR='     "$sh_file" | cut -d'"' -f2 | xargs -I{} echo "cursor={}"     >> "$TARGET_FILE"
+    grep 'export FOREGROUND_COLOR=' "$sh_file" | cut -d'"' -f2 | xargs -I{} echo "foreground={}" >> "$TARGET_FILE"
+    grep 'export CURSOR_COLOR='     "$sh_file" | cut -d'"' -f2 | xargs -I{} echo "cursor={}"     >> "$TARGET_FILE"
     
     ((COUNT_NEW++))
+
+    # Visual Progress (Updates the same line)
+    printf "╬     ${DIM}Converting:${RESET} %-30s\r" "$PROFILE_NAME"
 done
 
-
-# cleanup
+# Cleanup
 rm -rf "$TEMP_DIR"
 
-printf "\r\033[K"
-echo "╬"
-echo -e "╠╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌ ${WHITE}${BOLD}R E P O R T${RESET} ╌╌╌╌╌╌╌╌╌╌╌╌╌╌ ◇"
-echo "╬"
-echo -e "╬ ${GREEN}${BOLD}[+]${RESET} Added:   ${BOLD}${COUNT_NEW}${RESET}"
-echo -e "╬ ${CYAN}${BOLD}[-]${RESET} Skipped: ${BOLD}${COUNT_SKIPPED}${RESET}"
-echo -e "╚══════════════════════════════════════════ ☢"
-echo ""
+printf "\r\033[K" # Clear progress line
+echo -e "╬ ${GREEN}${BOLD}[+]${RESET} Sync and conversion complete."
 
+# Report
+echo "╬"
+echo -e "╬ ${WHITE}${BOLD}Report:${RESET}"
+echo -e "╬     New Themes: ${GREEN}${COUNT_NEW}${RESET}"
+echo -e "╬     Skipped:    ${DIM}${COUNT_SKIPPED}${RESET}"
+echo "╬"
+echo -e "╚═══════════════════ ${GREEN}${BOLD}FINISHED${RESET} ══════════════════ ☢"
+echo ""
 
 # LbsLightX
