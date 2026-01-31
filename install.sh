@@ -35,14 +35,19 @@ printf "╬ ${CYAN}[*]${RESET} Connecting to repository...\r"
 status_code=$(curl -s -o /dev/null -I -w "%{http_code}" \
     "https://github.com/LbsLightX/1llicit-colors")
 
+printf "\r\033[K"
+
 if [ "$status_code" -ne 200 ]; then
-    printf "\r\033[K"
     echo -e "╬ ${RED}${BOLD}[!] Error:${RESET} Unable to reach repository."
     echo -e "╬     ${DIM}Please check your internet connection.${RESET}"
     echo -e "╚══════════════════════════════════════════ ◈"
     echo
     exit 1
 fi
+
+# Fetch Theme List
+printf "╬ ${CYAN}[*]${RESET} Loading theme list...\r"
+
 
 # Fetch Theme List
 printf "╬ ${CYAN}[*]${RESET} Loading theme list...\n"
