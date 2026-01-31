@@ -48,10 +48,6 @@ fi
 # Fetch Theme List
 printf "╬ ${CYAN}[*]${RESET} Loading theme list...\r"
 
-
-# Fetch Theme List
-printf "╬ ${CYAN}[*]${RESET} Loading theme list...\n"
-
 theme_data=$(curl -fSsL \
     https://api.github.com/repos/LbsLightX/1llicit-colors/git/trees/main?recursive=1 |
     jq -r '.tree[] | select(.path | match("^themes/.*\\.properties$")) |
