@@ -19,7 +19,7 @@ TEMP_DIR="gogh_temp"
 TARGET_DIR="themes"
 
 # Header
-echo -e "\n╔═══════════════ ${WHITE}${BOLD}${UNDER}SYNC MANAGER${RESET} ══════════════ ☢"
+echo -e "\n╔═══════════════ ${WHITE}${BOLD}${UNDER}SYNC MANAGER${RESET} ═════════════ ☢"
 echo "╬"
 
 # Directory Check
@@ -112,7 +112,7 @@ echo -e "╬ ${WHITE}${BOLD}Report:${RESET}"
 echo -e "╬     New Themes: ${GREEN}${COUNT_NEW}${RESET}"
 echo -e "╬     Skipped:    ${DIM}${COUNT_SKIPPED}${RESET}"
 echo "╬"
-echo -e "╚═══════════════════ ${GREEN}${BOLD}FINISHED${RESET} ══════════════════ ☢"
+echo -e "╚══════════════════ ${GREEN}${BOLD}FINISHED${RESET} ══════════════════ ☢"
 echo ""
 
 # LbsLightX

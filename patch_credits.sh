@@ -18,7 +18,7 @@ THEME_DIR="themes"
 OUTPUT_DIR="patched_themes"
 
 # Header
-echo -e "\n╔═══════════════ ${WHITE}${BOLD}${UNDER}THEME PATCHER${RESET} ═══════════════ ◈"
+echo -e "\n╔═══════════════ ${WHITE}${BOLD}${UNDER}THEME PATCHER${RESET} ═════════════ ◈"
 echo "╬"
 
 # Verification
